@@ -226,14 +226,14 @@ class Stream():
 
             finally:
 
-                self.fhdhr.logger.info("Removing Tuner Lock")
-                self.tuner.close()
-
                 if len(segments_dict.keys()):
                     self.fhdhr.logger.info("Removing %s chunks from the buffer." % len(segments_dict.keys()))
                     segments_dict = OrderedDict()
 
                 self.stream_obj.origin_plugin.close_stream(self.tuner.number, self.stream_obj.stream_args)
+
+                self.fhdhr.logger.info("Removing Tuner Lock")
+                self.tuner.close()
 
         def unbuffered_generator():
             start_time = datetime.datetime.utcnow()
@@ -296,10 +296,10 @@ class Stream():
 
             finally:
 
+                self.stream_obj.origin_plugin.close_stream(self.tuner.number, self.stream_obj.stream_args)
+
                 self.fhdhr.logger.info("Removing Tuner Lock")
                 self.tuner.close()
-
-                self.stream_obj.origin_plugin.close_stream(self.tuner.number, self.stream_obj.stream_args)
 
         if self.stream_obj.stream_args["buffer_size"] in [0, None, "0"]:
             self.fhdhr.logger.info("Stream will not use Any Buffering.")
